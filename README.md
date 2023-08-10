@@ -1,4 +1,4 @@
-# Terminal weather
+# Shorted links
 
 This script allows you to shorten links using the service [bit.ly](https://bitly.com/) and view the number of clicks on them.
 
@@ -24,7 +24,7 @@ pip install -r requirements.txt
 ```
 ### Settings
 
-You need to create .env file with GENERIC ACCESS TOKEN for [bit.ly](https://bitly.com/). See .env.template file for example.
+You need to create .env file with BITLY_TOKEN (type GENERIC ACCESS TOKEN) for [bit.ly](https://bitly.com/). See .env.template file for example.
 
 ### How to run
 
