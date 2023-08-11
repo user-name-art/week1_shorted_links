@@ -13,7 +13,7 @@ def shorten_link(headers, user_url):
 
     response = requests.post(post_api_url, headers=headers, json=request_options)
     response.raise_for_status()
-    return response.json()
+    return response.json()['link']
 
 
 def count_clicks(headers, user_url):
@@ -47,7 +47,7 @@ if __name__ == '__main__':
             count = count_clicks(headers, user_url)
             print('Количество переходов по ссылке: ', count)
         else:
-            bitlink = shorten_link(headers, user_url)['link']
+            bitlink = shorten_link(headers, user_url)
             print('Битлинк: ', bitlink)
     except requests.exceptions.HTTPError:
         print('Вы ввели некорректную ссылку, перепроверьте её.')
