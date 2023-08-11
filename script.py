@@ -5,34 +5,33 @@ from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 
-URL = 'https://api-ssl.bitly.com/v4/bitlinks'
-
-
-def shorten_link(headers, url, users_url):
+def shorten_link(headers, user_url):
+    post_api_url = 'https://api-ssl.bitly.com/v4/bitlinks'
     request_options = {
-    "long_url": users_url
+    "long_url": user_url
     }
 
-    response = requests.post(url, headers=headers, json=request_options)
+    response = requests.post(post_api_url, headers=headers, json=request_options)
     response.raise_for_status()
     return response.json()
 
 
-def get_count_clicks(headers, url, users_url):
-    count_url = f'{url}/{users_url}/clicks/summary'
+def count_clicks(headers, user_url):
+    link = urlparse(user_url)
+    checked_link = f'{link.netloc}{link.path}'
+    count_api_url = f'https://api-ssl.bitly.com/v4/bitlinks/{checked_link}/clicks/summary'
 
-    response = requests.get(count_url, headers=headers)
+    response = requests.get(count_api_url, headers=headers)
     response.raise_for_status()
     return response.json()['total_clicks']
 
 
-def is_bitlink(headers, url, users_url):
-    link = urlparse(users_url)
+def is_bitlink(headers, user_url):
+    link = urlparse(user_url)
     checked_link = f'{link.netloc}{link.path}'
-    check_bitlink_url = f'{url}/{checked_link}'
+    check_bitlink_api_url = f'https://api-ssl.bitly.com/v4/bitlinks/{checked_link}'
 
-    response = requests.get(check_bitlink_url, headers=headers)
-    response.raise_for_status()
+    response = requests.get(check_bitlink_api_url, headers=headers)
     return response.ok
 
 
@@ -41,14 +40,14 @@ if __name__ == '__main__':
 
     headers = {'Authorization': f'Bearer {os.environ["BITLY_TOKEN"]}'}
 
-    users_url = input('Введите ссылку: ')
+    user_url = input('Введите ссылку: ')
 
     try:
-        if is_bitlink(headers, URL, users_url):
-            count = get_count_clicks(headers, URL, users_url)
+        if is_bitlink(headers, user_url):
+            count = count_clicks(headers, user_url)
             print('Количество переходов по ссылке: ', count)
         else:
-            bitlink = shorten_link(headers, URL, users_url)['link']
+            bitlink = shorten_link(headers, user_url)['link']
             print('Битлинк: ', bitlink)
     except requests.exceptions.HTTPError:
         print('Вы ввели некорректную ссылку, перепроверьте её.')
