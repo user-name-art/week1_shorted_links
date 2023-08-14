@@ -1,4 +1,5 @@
 import os
+import argparse
 
 import requests
 from urllib.parse import urlparse
@@ -40,7 +41,9 @@ if __name__ == '__main__':
 
     headers = {'Authorization': f'Bearer {os.environ["BITLY_TOKEN"]}'}
 
-    user_url = input('Введите ссылку: ')
+    parser = argparse.ArgumentParser()
+    parser.add_argument ('link')
+    user_url = parser.parse_args().link
 
     try:
         if is_bitlink(headers, user_url):
