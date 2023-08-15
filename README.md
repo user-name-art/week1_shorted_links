@@ -29,7 +29,7 @@ You need to create .env file with BITLY_TOKEN (type GENERIC ACCESS TOKEN) for [b
 ### How to run
 
 ```
-python script.py
+python script.py <link>
 ```
 ### Project Goals
 
